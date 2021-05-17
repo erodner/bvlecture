@@ -1,5 +1,5 @@
 import numpy as np
-from skimage.draw import disk, rectangle
+from skimage.draw import disk, rectangle, polygon
 
 
 def generate_example():
@@ -43,3 +43,65 @@ def generate_example():
     img[objects==2,2] = offset[2] + sd + noise[objects==2]*10
     
     return img
+
+def rect_image_with_ground_truth():
+    """ This function generates a rotated rectangle in the center of an image """
+    img_shape = np.array((512, 512))
+    objects = np.zeros(img_shape)
+    h, w = np.random.randint(80, 230, (2))
+    c_point = img_shape/2.0
+    points = np.array([ [w,h], [w,-h], [-w,-h], [-w,h] ]) / 2.0
+    theta = (np.random.rand()-0.5)*np.pi/2.0
+    R = np.array([[ np.cos(theta), np.sin(theta)], [-np.sin(theta), np.cos(theta)]])
+    r_points = c_point + np.dot(points, R)
+    rr, cc = polygon(r_points[:,1], r_points[:,0], shape=img_shape)
+    objects[rr, cc] = 128
+    
+    # add some noiseness
+    sd = 30
+    bg = objects==0
+    fg = np.logical_not(bg)
+    noise = np.random.randn(*img_shape)
+    objects[fg] += noise[fg]*20
+    objects[bg] += noise[bg]*50 + 30
+    
+    objects[objects>255] = 255
+    objects[objects<0] = 0
+    objects = objects.astype(np.uint8)
+    
+    
+    return objects, theta, h, w
+
+def rect_image():
+    """ returns an image of a rotated rectangle """
+    img, _, _, _ = rect_image_with_ground_truth()
+    return img
+
+def print_stats(desc, errors):
+    """ simple function to output statistics of a list/array """
+    print (f"{desc} min: {np.min(errors)}")
+    print (f"{desc} max: {np.max(errors)}")
+    print (f"{desc} mean: {np.mean(errors)}")
+
+def test_algorithm(my_algorithm, num_tests=10):
+    """ this function generates synthetic images and compares the
+        image processing result with the ground-truth """
+    len_error = []
+    theta_error = []
+    for i in range(num_tests):
+        img, theta, h, w = rect_image_with_ground_truth()
+        print (f"{i}: {h} x {w} {theta}")
+        try:
+            a_len_sorted, a_orientation = my_algorithm(img)
+        except:
+            plt.figure()
+            plt.imshow(img)
+            plt.show()
+            raise
+        
+        print (f"{i}= {a_len_sorted[0]} x {a_len_sorted[1]} {a_orientation}")
+        theta_error.append(np.abs(theta-a_orientation))
+        len_error.append(np.linalg.norm(np.array(a_len_sorted) - np.array(sorted([h,w]))))
+        
+    print_stats("Orientation angle error", theta_error)
+    print_stats("Length error", len_error)
