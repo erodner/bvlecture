@@ -6,9 +6,9 @@ Author: Erik Rodner (HTW Berlin)
 
 First, let us create an anaconda environment. You can do this manually or simply use
 the predefined list of packages available in this repository.
-Type in the anaconda prompt the following commands:
+For windows, type in the anaconda prompt the following commands:
 ```bash
-conda create -n bvlecture --file conda-env.txt python==3.8
+conda create -n bvlecture --file conda-env-windows.txt python==3.8
 conda activate bvlecture
 ```
 

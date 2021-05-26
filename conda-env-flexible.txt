@@ -10,6 +10,5 @@ dependencies:
   - pandas
   - nltk
   - scikit-learn
-  - pytorch
+  - torchvision
 prefix: C:\Users\erikr\anaconda3\envs\bvlecture
-
