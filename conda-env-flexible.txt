@@ -11,4 +11,5 @@ dependencies:
   - nltk
   - scikit-learn
   - torchvision
-prefix: C:\Users\erikr\anaconda3\envs\bvlecture
+  - libtiff=4.0
+  - jupyter
