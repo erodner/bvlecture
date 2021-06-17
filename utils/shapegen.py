@@ -1,6 +1,15 @@
 import numpy as np
-from skimage.draw import disk, rectangle, polygon
+from skimage.draw import rectangle, polygon
+import matplotlib.pylab as plt
 
+try:
+    from skimage.draw import disk
+except:
+    try:
+        from skimage.morphology import disk
+    except:
+        pass
+     
 
 def generate_example():
     """ Generating an example image to perform binary segmentation """
