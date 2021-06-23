@@ -154,7 +154,7 @@ dependencies:
     - msvc-runtime==14.29.30036
     - numpy==1.20.3
     - pillow==8.2.0
-    - python-graphviz==0.16
+    - graphviz==0.16
     - qtconsole==5.1.0
     - requests==2.25.1
     - six==1.16.0
