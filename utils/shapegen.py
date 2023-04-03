@@ -6,7 +6,7 @@ try:
     from skimage.draw import disk
 except:
     try:
-        from skimage.morphology import disk
+        from skimage.draw import circle
     except:
         pass
      
@@ -26,7 +26,7 @@ def generate_example():
     for i in range(num_circles):
         center = np.random.randint((0,0), img_shape)
         radius = np.random.randint(10, 20)
-        rr, cc = disk(center, radius, shape=img_shape)
+        rr, cc = circle(center[0], center[1], radius, shape=img_shape)
         if not np.any(objects[rr, cc]):
             objects[rr, cc] = 1
 
